@@ -21,7 +21,9 @@ class GWTS
   public:
     GWTS();
     void set_colors(uint8_t lRed, uint8_t lGreen, uint8_t lBlue, uint8_t rRed, uint8_t rGreen, uint8_t rBlue);
-	void send_data();
+    void send_data();
+    void send_cmd(byte cmds[6], int cmdlength);
+
   private:
     unsigned char calc_crc(unsigned char *data, unsigned char length);
     void pulseIR(long microsecs, int hilo);
@@ -39,5 +41,5 @@ class GWTS
     uint8_t cmdcount;
     unsigned char checksum;
 };
- 
+
 #endif

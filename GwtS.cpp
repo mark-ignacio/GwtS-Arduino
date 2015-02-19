@@ -73,15 +73,15 @@ void GWTS::pulseIR(long microsecs, int hilo) {
   // we'll count down from the number of microseconds we are told to wait
   while (microsecs > 0) {
     // 38 kHz is about 13 microseconds high and 13 microseconds low
-	if ( hilo )
-		PORTD |= _BV(PD2);
-	else
-		PORTD &= ~_BV(PD2);
+    if ( hilo )
+        PORTD |= _BV(PD2);
+    else
+        PORTD &= ~_BV(PD2);
     delayMicroseconds(12);         // hang out for 12 microseconds
-	int i;
-	for ( i = 0; i < 50; i++ )
-		continue;
-	PORTD &= ~_BV(PD2);
+    int i;
+    for ( i = 0; i < 50; i++ )
+        continue;
+    PORTD &= ~_BV(PD2);
     delayMicroseconds(12);         // hang out for 12 microseconds
     microsecs -= 26;
   }
@@ -89,9 +89,9 @@ void GWTS::pulseIR(long microsecs, int hilo) {
 
 void GWTS::sendbyte(byte b) {
 #ifdef DEBUG
-	Serial.print("Sending: ");
-	if ( b < 0x10 ) {Serial.print('0');}
-	Serial.println(b, HEX);
+    Serial.print("Sending: ");
+    if ( b < 0x10 ) {Serial.print('0');}
+    Serial.println(b, HEX);
 #endif
   byte i=0;
   // Send 8-N-1 data as the mouse ears communicate in.
@@ -202,7 +202,7 @@ void GWTS::set_colors(uint8_t lRed, uint8_t lGreen, uint8_t lBlue, uint8_t rRed,
   int i = 0;
   while ( i < cmdcount )
   {
-    if (cmdbuf[i]<0x10) {Serial.print("0");} 
+    if (cmdbuf[i]<0x10) {Serial.print("0");}
     Serial.print(cmdbuf[i++], HEX);
   }
   if (checksum<0x10) {Serial.print("0");}
@@ -224,3 +224,10 @@ void GWTS::send_data()
   sei();
 }
 
+void GWTS::send_cmd(byte cmds[], int cmdLen)
+{
+    memcpy(cmdbuf, cmds, min(6, cmdLen));
+    cmdcount = cmdlength;
+    checksum = calc_crc(cmdbuf, cmdcount);
+    send_data();
+}
